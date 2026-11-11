@@ -1,0 +1,52 @@
+﻿@model RaceBay.MVC.Models.Dto.EventDto
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show">
+        @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show">
+        @TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="card shadow-sm border-0 mb-4">
+    @if (!string.IsNullOrEmpty(Model.BannerImageUrl))
+    {
+        <img src="@Model.BannerImageUrl" class="card-img-top" alt="@Model.Name" style="max-height: 400px; object-fit: cover;" />
+    }
+    <div class="card-body p-4">
+        <div class="d-flex justify-content-between align-items-start">
+            <div>
+                <h1 class="fw-bold mb-2">@Model.Name</h1>
+                <h5 class="text-muted mb-4">
+                    📅 @Model.Date.ToString("MMMM dd, yyyy") &nbsp;|&nbsp; 📍 @Model.Location
+                </h5>
+            </div>
+            @if (Model.Category != null)
+            {
+                <span class="badge bg-primary fs-6">@Model.Category.Name (@Model.Category.Distance)</span>
+            }
+        </div>
+
+        <h5 class="fw-bold mt-4">About this Event</h5>
+        <p>@Model.Description</p>
+
+        <hr class="my-4" />
+
+        <form asp-action="Enroll" method="post" class="text-center">
+            <input type="hidden" name="eventId" value="@Model.Id" />
+            <button type="submit" class="btn btn-success btn-lg px-5 fw-bold">Enroll Now</button>
+            <p class="text-muted small mt-2">By enrolling, your status will be marked as Pending until approved.</p>
+        </form>
+    </div>
+</div>
+<a asp-action="Index" class="btn btn-outline-secondary">← Back to Events</a>

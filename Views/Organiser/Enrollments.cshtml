@@ -1,0 +1,49 @@
+﻿@model List<RaceBay.MVC.Models.Dto.EnrollmentDto>
+@{
+    ViewData["Title"] = "Event Enrollments";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold">Enrolled Participants</h2>
+    <a asp-action="Events" class="btn btn-outline-secondary">← Back to Events</a>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">No participants have enrolled in this event yet.</div>
+}
+else
+{
+    <div class="table-responsive shadow-sm rounded">
+        <table class="table table-hover bg-white mb-0">
+            <thead class="table-dark">
+                <tr>
+                    <th>Participant Name</th>
+                    <th>Email</th>
+                    <th>Enrolled Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var enroll in Model)
+                {
+                    <tr>
+                        <td class="align-middle fw-bold">@enroll.ParticipantName</td>
+                        <td class="align-middle">@enroll.ParticipantEmail</td>
+                        <td class="align-middle">@enroll.EnrolledAt.ToString("MMM dd, yyyy")</td>
+                        <td class="align-middle">
+                            @if (enroll.Status == "Confirmed")
+                            {
+                                <span class="badge bg-success">Confirmed</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning text-dark">Pending</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

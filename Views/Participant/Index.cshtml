@@ -1,0 +1,74 @@
+﻿@model List<RaceBay.MVC.Models.Dto.EventDto>
+@{
+    ViewData["Title"] = "Upcoming Events";
+    var categories = ViewBag.Categories as List<RaceBay.MVC.Models.Dto.CategoryDto>;
+    int? currentCategory = ViewBag.CurrentCategory;
+    string? currentSearch = ViewBag.CurrentSearch;
+}
+
+<div class="bg-primary text-white rounded p-5 mb-4 shadow-sm">
+    <h1 class="display-5 fw-bold">Find Your Next Race</h1>
+    <p class="lead">Browse upcoming events and challenge yourself.</p>
+</div>
+
+<!-- Filter Section -->
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-body">
+        <form method="get" asp-action="Index" class="row g-3 align-items-end">
+            <div class="col-md-5">
+                <label class="form-label fw-semibold">Search by Name</label>
+                <input type="text" name="searchString" class="form-control" value="@currentSearch" placeholder="e.g., City Marathon" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">Category</label>
+                <select name="categoryId" class="form-select">
+                    <option value="">All Categories</option>
+                    @if (categories != null)
+                    {
+                        foreach (var cat in categories)
+                        {
+                            <option value="@cat.Id" selected="@(currentCategory == cat.Id)">@cat.Name (@cat.Distance)</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary w-100">Apply Filters</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Events Grid -->
+<div class="row">
+    @if (!Model.Any())
+    {
+        <div class="col-12"><div class="alert alert-info">No events found matching your criteria.</div></div>
+    }
+    else
+    {
+        @foreach (var ev in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm border-0">
+                    @if (!string.IsNullOrEmpty(ev.BannerImageUrl))
+                    {
+                        <img src="@ev.BannerImageUrl" class="card-img-top" alt="@ev.Name" style="height: 180px; object-fit: cover;" />
+                    }
+                    else
+                    {
+                        <div class="bg-secondary text-white text-center py-5" style="height: 180px;">No Image</div>
+                    }
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">@ev.Name</h5>
+                        <p class="card-text text-muted small mb-1">📅 @ev.Date.ToString("MMMM dd, yyyy")</p>
+                        <p class="card-text text-muted small">📍 @ev.Location</p>
+                    </div>
+                    <div class="card-footer bg-white border-0 pb-3">
+                        <a asp-action="EventDetails" asp-route-id="@ev.Id" class="btn btn-outline-primary w-100">View Details</a>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>

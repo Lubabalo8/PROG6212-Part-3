@@ -1,0 +1,52 @@
+﻿@model RaceBay.MVC.Models.ViewModels.ResultFormViewModel
+@{
+    ViewData["Title"] = "Enter Results";
+    var enrollments = ViewBag.Enrollments as List<RaceBay.MVC.Models.Dto.EnrollmentDto>;
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4">
+                <h3 class="fw-bold mb-4">Publish Results</h3>
+
+                <form asp-action="EnterResults" method="post">
+                    <input type="hidden" asp-for="EventId" />
+
+                    <div class="mb-3">
+                        <label asp-for="ParticipantId" class="form-label fw-semibold">Select Participant</label>
+                        <select asp-for="ParticipantId" class="form-select">
+                            <option value="">-- Select Participant --</option>
+                            @if (enrollments != null)
+                            {
+                                foreach (var e in enrollments)
+                                {
+                                    <option value="@e.Id">@e.ParticipantName (@e.ParticipantEmail)</option>
+                                }
+                            }
+                        </select>
+                        <span asp-validation-for="ParticipantId" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="FinishTime" class="form-label fw-semibold"></label>
+                        <input asp-for="FinishTime" class="form-control" placeholder="01:23:45" />
+                        <span asp-validation-for="FinishTime" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Position" class="form-label fw-semibold"></label>
+                        <input asp-for="Position" class="form-control" type="number" min="1" />
+                        <span asp-validation-for="Position" class="text-danger small"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-success w-100">Publish Result</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

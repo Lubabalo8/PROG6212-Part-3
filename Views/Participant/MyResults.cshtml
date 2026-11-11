@@ -1,0 +1,64 @@
+﻿@model List<RaceBay.MVC.Models.Dto.ResultDto>
+@{
+    ViewData["Title"] = "My Results";
+}
+
+<h2 class="fw-bold mb-4">My Race History</h2>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">No results found yet. Once you complete an event, your results will appear here.</div>
+}
+else
+{
+    <div class="table-responsive shadow-sm rounded">
+        <table class="table table-hover bg-white mb-0 align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Event</th>
+                    <th>Date</th>
+                    <th>Category</th>
+                    <th>Finish Time</th>
+                    <th>Overall Position</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var result in Model)
+                {
+                    <tr>
+                        <td class="fw-bold text-primary">@result.EventName</td>
+                        <td>@result.EventDate.ToString("MMM dd, yyyy")</td>
+                        <td>@result.CategoryName</td>
+                        <td class="fw-semibold">@result.FinishTime.ToString(@"hh\:mm\:ss")</td>
+                        <td>
+                            <span class="badge bg-dark fs-6">
+                                @result.Position<sup>@GetOrdinal(result.Position)</sup> out of @result.TotalFinishers
+                            </span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@functions {
+    public string GetOrdinal(int number)
+    {
+        if (number <= 0) return "";
+        switch (number % 100)
+        {
+            case 11:
+            case 12:
+            case 13:
+                return "th";
+        }
+        switch (number % 10)
+        {
+            case 1: return "st";
+            case 2: return "nd";
+            case 3: return "rd";
+            default: return "th";
+        }
+    }
+}
