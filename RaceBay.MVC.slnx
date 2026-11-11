@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="RaceBay.API/RaceBay.API.csproj" Id="042a6996-6fc9-43c1-ab62-dfc18c01ef12" />
+  <Project Path="RaceBay.MVC/RaceBay.MVC.csproj" />
+</Solution>
